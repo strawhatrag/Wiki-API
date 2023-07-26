@@ -27,11 +27,30 @@ const articleSchema = {
 
 const Article = mongoose.model("Article", articleSchema);
 
-app.get("/articles", async (req, res) => {
-  const articles = await Article.find({});
+//chaining for same route
+// app.route()
+app
+  .route("/articles")
+  .get(async (req, res) => {
+    const articles = await Article.find({});
+    res.send(articles);
+  })
+  .post(async (req, res) => {
+    const newArticle = new Article({
+      title: req.body.title,
+      content: req.body.content,
+    });
 
-  res.send(articles);
-});
+    await newArticle.save();
+
+    res.sendStatus(200);
+  })
+  .delete(async (req, res) => {
+    await Article.deleteOne({
+      title: "goooooo",
+    });
+    res.sendStatus(200);
+  });
 
 app.listen(3000, function () {
   console.log("Server on http://localhost:3000");
