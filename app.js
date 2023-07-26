@@ -52,6 +52,37 @@ app
     res.sendStatus(200);
   });
 
+/// another example using params
+
+app
+  .route("/articles/:articleTitle")
+  .get(async (req, res) => {
+    const articles = await Article.findOne({ title: req.params.articleTitle });
+    res.send(articles);
+  })
+  .put(async (req, res) => {
+    const articles = await Article.updateOne(
+      { title: req.params.articleTitle },
+      { title: "chuck", content: "he's a goddamn hero san" }
+    );
+
+    res.sendStatus(200);
+  })
+  .patch(async (req, res) => {
+    const articles = await Article.updateOne(
+      { title: req.params.articleTitle },
+      { title: "packer" }
+    );
+
+    res.sendStatus(200);
+  })
+  .delete(async (req, res) => {
+    await Article.deleteOne({
+      title: req.params.articleTitle,
+    });
+    res.sendStatus(200);
+  });
+
 app.listen(3000, function () {
   console.log("Server on http://localhost:3000");
 });
